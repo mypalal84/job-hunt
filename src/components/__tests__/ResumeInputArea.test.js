@@ -63,7 +63,7 @@ describe('ResumeInputArea', () => {
   await userEvent.upload(fileInput, file);
 
   // wait for the file name to appear (FileReader onload should populate file info)
-  await waitFor(() => expect(screen.getByText(/resume.pdf/i)).toBeInTheDocument());
+  await screen.findByText(/resume.pdf/i);
 
   const saveBtn = screen.getByRole('button', { name: /Save Resume File/i });
   await userEvent.click(saveBtn);
