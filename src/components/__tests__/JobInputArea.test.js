@@ -5,15 +5,15 @@ import JobInputArea from '../JobInputArea';
 
 describe('JobInputArea', () => {
   test('renders mode buttons and switches modes', async () => {
-  render(<JobInputArea onSubmit={jest.fn()} />);
-  // find the mode "Add URL" button specifically (there's also a submit button with same text)
-  const addUrlElements = screen.getAllByText(/Add URL/i);
-  const addUrlModeBtn = addUrlElements.find((el) => el.tagName === 'BUTTON' && el.getAttribute('type') === 'button');
-  expect(addUrlModeBtn).toBeInTheDocument();
-  expect(screen.getByText(/Paste Description/i)).toBeInTheDocument();
+    render(<JobInputArea onSubmit={jest.fn()} />);
+    // use test ids for mode buttons
+    const addUrlModeBtn = screen.getByTestId('mode-add-url');
+    const pasteDescBtn = screen.getByTestId('mode-paste-description');
+    expect(addUrlModeBtn).toBeInTheDocument();
+    expect(pasteDescBtn).toBeInTheDocument();
 
-  // switch to description mode
-  await userEvent.click(screen.getByRole('button', { name: /Paste Description/i }));
+    // switch to description mode
+    await userEvent.click(pasteDescBtn);
     expect(screen.getByLabelText(/Job Description:/i)).toBeInTheDocument();
   });
 
@@ -21,10 +21,10 @@ describe('JobInputArea', () => {
     const onSubmit = jest.fn();
     render(<JobInputArea onSubmit={onSubmit} />);
 
-    // ensure in URL mode, submit empty — find submit button inside the form
-    const input = screen.getByPlaceholderText('https://example.com/job-posting');
-    const form = input.closest('form');
-    const submitBtn = within(form).getByRole('button', { name: /Add URL/i });
+  // ensure in URL mode, submit empty — find submit button inside the form by test id
+  const input = screen.getByPlaceholderText('https://example.com/job-posting');
+  const form = screen.getByTestId('job-form');
+  const submitBtn = within(form).getByRole('button', { name: /Add URL/i });
     await userEvent.click(submitBtn);
 
     expect(await screen.findByText(/Please enter a URL/i)).toBeInTheDocument();
@@ -35,11 +35,11 @@ describe('JobInputArea', () => {
     const onSubmit = jest.fn();
     render(<JobInputArea onSubmit={onSubmit} />);
 
-  const input = screen.getByPlaceholderText('https://example.com/job-posting');
+    const input = screen.getByPlaceholderText('https://example.com/job-posting');
     // type invalid URL
     await userEvent.type(input, 'not-a-url');
     // submit (last button)
-  const form = input.closest('form');
+  const form = screen.getByTestId('job-form');
   let submitBtn = within(form).getByRole('button', { name: /Add URL/i });
   await userEvent.click(submitBtn);
 

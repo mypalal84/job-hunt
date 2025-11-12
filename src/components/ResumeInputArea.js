@@ -162,6 +162,7 @@ function ResumeInputArea({ onSubmit, currentResume }) {
             <div className="file-upload-wrapper">
               <input
                 id="resume-file"
+                data-testid="resume-file-input"
                 type="file"
                 accept=".pdf,.docx,.doc"
                 onChange={handleFileUpload}

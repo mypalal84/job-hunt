@@ -1,0 +1,20 @@
+
+/Users/alexcahn/Desktop/job-hunt/src/components/__tests__/AdditionalInfoArea.test.js
+  36:11  warning  'textarea' is assigned a value but never used  no-unused-vars
+
+/Users/alexcahn/Desktop/job-hunt/src/components/__tests__/JobInputArea.test.js
+  26:24  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+  26:24  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+  42:22  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+  42:22  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+
+/Users/alexcahn/Desktop/job-hunt/src/components/__tests__/ResumeInputArea.test.js
+   62:30  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+   62:30  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+   85:32  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+   85:32  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+  100:32  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+  100:32  error  Avoid direct Node access. Prefer using the methods from Testing Library  testing-library/no-node-access
+
+✖ 11 problems (10 errors, 1 warning)
+

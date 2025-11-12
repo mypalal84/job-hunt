@@ -40,6 +40,7 @@ function JobInputArea({ onSubmit }) {
       <div className="input-mode-selector">
         <button
           type="button"
+          data-testid="mode-add-url"
           className={`mode-btn ${inputMode === 'url' ? 'active' : ''}`}
           onClick={() => {
             setInputMode('url');
@@ -50,6 +51,7 @@ function JobInputArea({ onSubmit }) {
         </button>
         <button
           type="button"
+          data-testid="mode-paste-description"
           className={`mode-btn ${inputMode === 'description' ? 'active' : ''}`}
           onClick={() => {
             setInputMode('description');
@@ -60,7 +62,7 @@ function JobInputArea({ onSubmit }) {
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="input-form">
+      <form onSubmit={handleSubmit} className="input-form" data-testid="job-form">
         {inputMode === 'url' ? (
           <div className="input-group">
             <label htmlFor="job-url">Job Posting URL:</label>

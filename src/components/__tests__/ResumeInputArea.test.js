@@ -57,10 +57,10 @@ describe('ResumeInputArea', () => {
     render(<ResumeInputArea onSubmit={onSubmit} />);
 
     await userEvent.click(screen.getByRole('button', { name: /Upload File/i }));
-    const file = mockFile('resume.pdf', 1024, 'application/pdf');
+      const file = mockFile('resume.pdf', 1024, 'application/pdf');
 
-  const fileInput = document.getElementById('resume-file');
-  await userEvent.upload(fileInput, file);
+      const fileInput = screen.getByTestId('resume-file-input');
+      await userEvent.upload(fileInput, file);
 
   // wait for the file name to appear (FileReader onload should populate file info)
   await screen.findByText(/resume.pdf/i);
@@ -82,8 +82,8 @@ describe('ResumeInputArea', () => {
     await userEvent.click(screen.getByRole('button', { name: /Upload File/i }));
     const file = mockFile('image.png', 1024, 'image/png');
 
-    const fileInput = document.getElementById('resume-file');
-    await userEvent.upload(fileInput, file);
+  const fileInput = screen.getByTestId('resume-file-input');
+  await userEvent.upload(fileInput, file);
 
     expect(await screen.findByText(/Please upload a PDF or DOCX file/i)).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
@@ -97,8 +97,8 @@ describe('ResumeInputArea', () => {
     const bigFile = new File([new ArrayBuffer(6 * 1024 * 1024)], 'big.pdf', { type: 'application/pdf' });
     Object.defineProperty(bigFile, 'size', { value: 6 * 1024 * 1024 });
 
-    const fileInput = document.getElementById('resume-file');
-    await userEvent.upload(fileInput, bigFile);
+  const fileInput = screen.getByTestId('resume-file-input');
+  await userEvent.upload(fileInput, bigFile);
 
     expect(await screen.findByText(/File size must be less than 5MB/i)).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
