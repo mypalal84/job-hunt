@@ -20,11 +20,11 @@ describe('JobInputArea', () => {
   test('shows error on empty url submit', async () => {
     const onSubmit = jest.fn();
     render(<JobInputArea onSubmit={onSubmit} />);
-
-  // ensure in URL mode, submit empty — find submit button inside the form by test id
-  const input = screen.getByPlaceholderText('https://example.com/job-posting');
-  const form = screen.getByTestId('job-form');
-  const submitBtn = within(form).getByRole('button', { name: /Add URL/i });
+    // ensure in URL mode, submit empty — find submit button inside the form by test id
+    const input = screen.getByPlaceholderText('https://example.com/job-posting');
+    expect(input).toBeInTheDocument();
+    const form = screen.getByTestId('job-form');
+    const submitBtn = within(form).getByRole('button', { name: /Add URL/i });
     await userEvent.click(submitBtn);
 
     expect(await screen.findByText(/Please enter a URL/i)).toBeInTheDocument();
