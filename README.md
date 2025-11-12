@@ -1,5 +1,7 @@
 # Job Hunt — Resume & Cover Letter Tailoring
 
+[![CI](https://github.com/mypalal84/job-hunt/actions/workflows/ci.yml/badge.svg)](https://github.com/mypalal84/job-hunt/actions/workflows/ci.yml)
+
 Job Hunt is a small React app that helps job seekers tailor their resume and cover letter to a specific job posting. Users can paste or upload their resume, add extra skills/work experience they'd like to highlight, and paste a job description or URL. The app's goal is to generate a tailored resume and cover letter that better matches the target job.
 
 This repository includes the UI inputs and validation logic, unit tests for components, and a GitHub Actions CI workflow that runs the test suite.

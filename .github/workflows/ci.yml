@@ -24,3 +24,13 @@ jobs:
 
       - name: Run tests
         run: npm test -- --watchAll=false
+
+      - name: Build (optional)
+        run: npm run build --if-present
+
+      - name: Upload production build as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: build
