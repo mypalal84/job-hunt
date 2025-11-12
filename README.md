@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# Job Hunt — Resume & Cover Letter Tailoring
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Job Hunt is a small React app that helps job seekers tailor their resume and cover letter to a specific job posting. Users can paste or upload their resume, add extra skills/work experience they'd like to highlight, and paste a job description or URL. The app's goal is to generate a tailored resume and cover letter that better matches the target job.
 
-## Available Scripts
+This repository includes the UI inputs and validation logic, unit tests for components, and a GitHub Actions CI workflow that runs the test suite.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- Paste or upload your resume (PDF / DOCX supported)
+- Paste additional work experience / skills you want to emphasize
+- Paste a job description or provide a job posting URL
+- Validation and friendly error messages for inputs and uploads
+- Unit tests for components and an example CI workflow (`.github/workflows/ci.yml`)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Quick Start
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Requirements: Node.js 18+ and npm
 
-### `npm test`
+1. Install dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+npm install
+```
 
-### `npm run build`
+2. Run the development server
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm start
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Open http://localhost:3000 in your browser.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. Run tests
 
-### `npm run eject`
+```bash
+npm test
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+CI: The repository includes a GitHub Actions workflow at `.github/workflows/ci.yml` that runs `npm test` on push and pull requests.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Files of interest
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `src/components/JobInputArea.js` — input URL or paste a job description
+- `src/components/ResumeInputArea.js` — paste resume text or upload PDF/DOCX
+- `src/components/AdditionalInfoArea.js` — enter additional experience/skills
+- `src/test-utils.js` — shared test helpers (mock FileReader, create test files)
+- `src/components/__tests__/` — component unit tests
+- `.github/workflows/ci.yml` — CI workflow to run tests
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## How it works (current scope)
 
-## Learn More
+Currently the app collects inputs and stores them in local React state. The next steps are to implement the text-processing / generation engine that will produce a tailored resume and a cover letter from the provided resume, additional info, and job description. That engine might be:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- A server-side microservice that performs parsing, matching, and generation
+- Or a client-side module that calls a text-generation API (example: OpenAI) — if you add one, keep secrets out of the repo and use server-side proxying or GitHub Secrets for CI
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Testing
 
-### Code Splitting
+Tests use Jest + React Testing Library. Shared helpers are in `src/test-utils.js` to assist with mocking file uploads and FileReader behaviour.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Run tests locally:
 
-### Analyzing the Bundle Size
+```bash
+npm test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+To run a single test file:
 
-### Making a Progressive Web App
+```bash
+npm test -- src/components/__tests__/ResumeInputArea.test.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Development notes & next steps
 
-### Advanced Configuration
+- Implement resume/cover-letter tailoring logic (server or client) and wire it to the UI
+- Add persistent storage (localStorage or backend DB) for saved resumes and job applications
+- Improve accessibility and add automated accessibility tests (`jest-axe`)
+- Add integration tests for the tailoring pipeline once implemented
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Contributing
 
-### Deployment
+Contributions are welcome. Create issues for new features or bug reports, and open pull requests against `main`.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## License
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is unlicensed (add a LICENSE file to choose one).
