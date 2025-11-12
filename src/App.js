@@ -21,6 +21,19 @@ function App() {
     setAdditionalInfo(infoData);
   };
 
+  // whether we have at least one job listing and a resume provided
+  const canGenerate = jobListings.length > 0 && resume && ((resume.type === 'text' && resume.content && resume.content.trim() !== '') || resume.type === 'file');
+
+  const [actionMessage, setActionMessage] = useState('');
+
+  const handleGenerate = () => {
+    // placeholder action — in future this could trigger resume tailoring or export
+    setActionMessage('Ready to generate application materials for the saved job listing(s).');
+    // keep console log for developer visibility
+    // eslint-disable-next-line no-console
+    console.log('Generate action triggered', { jobListings, resume, additionalInfo });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -29,6 +42,18 @@ function App() {
           <JobInputArea onSubmit={handleJobSubmit} />
           <ResumeInputArea onSubmit={handleResumeSubmit} currentResume={resume} />
           <AdditionalInfoArea onSubmit={handleAdditionalInfoSubmit} currentInfo={additionalInfo} />
+        </div>
+        <div className="actions">
+          <button
+            type="button"
+            data-testid="generate-btn"
+            className="generate-btn"
+            disabled={!canGenerate}
+            onClick={handleGenerate}
+          >
+            Generate Application
+          </button>
+          {actionMessage && <p className="action-message">{actionMessage}</p>}
         </div>
       </header>
       <main className="App-main">
