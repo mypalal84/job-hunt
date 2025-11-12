@@ -17,10 +17,13 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint \"src/**/*.{js,jsx}\" --max-warnings=0",
+    "lint:fix": "eslint \"src/**/*.{js,jsx}\" --fix",
+    "prepare": "husky install",
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "eslint": "^8.49.0"
+    "eslint": "^8.49.0",
+    "husky": "^8.0.0"
   },
   "eslintConfig": {
     "extends": [

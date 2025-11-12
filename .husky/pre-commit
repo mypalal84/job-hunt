@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run ESLint auto-fix before commit and stage any fixes
+echo "Running lint:fix (ESLint --fix)"
+npm run lint:fix
+echo "Staging any autofixed files"
+git add -A
