@@ -33,7 +33,8 @@ describe('AdditionalInfoArea', () => {
     const onSubmit = jest.fn();
     render(<AdditionalInfoArea onSubmit={onSubmit} currentInfo={null} />);
 
-    const textarea = screen.getByPlaceholderText(/e.g., Leadership in cross-functional teams/i);
+  const textarea = screen.getByPlaceholderText(/e.g., Leadership in cross-functional teams/i);
+  expect(textarea).toBeInTheDocument();
     const saveBtn = screen.getByRole('button', { name: /Save Information/i });
     // submit while empty
     await userEvent.click(saveBtn);
