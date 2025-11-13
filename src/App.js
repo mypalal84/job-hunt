@@ -76,6 +76,28 @@ function App() {
             </ul>
           </div>
         )}
+        {resume && (
+          <div className="resume-section">
+            <h2>Resume</h2>
+            {resume.type === 'text' && (
+              <div>
+                <p className="resume-indicator">Resume Text Saved</p>
+                <pre className="resume-content">{resume.content}</pre>
+              </div>
+            )}
+            {resume.type === 'file' && (
+              <div>
+                <p className="resume-indicator">File: {resume.fileName}</p>
+              </div>
+            )}
+          </div>
+        )}
+        {additionalInfo && (
+          <div className="additional-info-section">
+            <h2>Additional Work Experience & Skills</h2>
+            <p className="additional-info-content">{additionalInfo.content}</p>
+          </div>
+        )}
       </main>
     </div>
   );
