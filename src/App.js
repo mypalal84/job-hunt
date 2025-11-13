@@ -3,6 +3,7 @@ import './App.css';
 import JobInputArea from './components/JobInputArea';
 import ResumeInputArea from './components/ResumeInputArea';
 import AdditionalInfoArea from './components/AdditionalInfoArea';
+import GeneratedContent from './components/GeneratedContent';
 
 function App() {
   const [jobListings, setJobListings] = useState([]);
@@ -25,13 +26,42 @@ function App() {
   const canGenerate = jobListings.length > 0 && resume && ((resume.type === 'text' && resume.content && resume.content.trim() !== '') || resume.type === 'file');
 
   const [actionMessage, setActionMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState(null);
 
-  const handleGenerate = () => {
-    // placeholder action — in future this could trigger resume tailoring or export
-    setActionMessage('Ready to generate application materials for the saved job listing(s).');
-    // keep console log for developer visibility
-    // eslint-disable-next-line no-console
-    console.log('Generate action triggered', { jobListings, resume, additionalInfo });
+  const handleGenerate = async () => {
+    setLoading(true);
+    setActionMessage('');
+    setGeneratedContent(null);
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          jobListings,
+          resume,
+          additionalInfo,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate content');
+      }
+
+      const data = await response.json();
+      setGeneratedContent(data);
+      setActionMessage('Application materials generated successfully!');
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Generation error:', error);
+      setActionMessage(`Error: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -48,10 +78,10 @@ function App() {
             type="button"
             data-testid="generate-btn"
             className="generate-btn"
-            disabled={!canGenerate}
+            disabled={!canGenerate || loading}
             onClick={handleGenerate}
           >
-            Generate Application
+            {loading ? 'Generating...' : 'Generate Application'}
           </button>
           {actionMessage && <p className="action-message">{actionMessage}</p>}
         </div>
@@ -99,6 +129,12 @@ function App() {
           </div>
         )}
       </main>
+      {generatedContent && (
+        <GeneratedContent
+          content={generatedContent}
+          onClose={() => setGeneratedContent(null)}
+        />
+      )}
     </div>
   );
 }

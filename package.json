@@ -7,6 +7,9 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-scripts": "5.0.1",
@@ -14,6 +17,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "node server/index.js",
+    "dev": "concurrently \"npm run server\" \"npm start\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint \"src/**/*.{js,jsx}\" --max-warnings=0",
@@ -22,9 +27,11 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
+    "concurrently": "^8.2.2",
     "eslint": "^8.49.0",
     "husky": "^8.0.0"
   },
+  "proxy": "http://localhost:3001",
   "eslintConfig": {
     "extends": [
       "react-app",

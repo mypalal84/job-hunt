@@ -137,19 +137,43 @@
   word-break: break-word;
 }
 
+.actions {
+  margin-top: 30px;
+}
+
 .generate-btn {
   background-color: #61dafb;
   color: white;
   border: none;
-  margin-top: 30px;
-  padding: 12px 20px;
+  padding: 14px 32px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
-  transition: background-color 0.3s ease;
-  &:disabled {
-    background-color: #a02854;
-    cursor: not-allowed;
-  }
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(97, 218, 251, 0.3);
+}
+
+.generate-btn:hover:not(:disabled) {
+  background-color: #4fa8c5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(97, 218, 251, 0.4);
+}
+
+.generate-btn:disabled {
+  background-color: #666;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.action-message {
+  margin-top: 16px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 14px;
+  text-align: center;
 }
