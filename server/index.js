@@ -1,12 +1,94 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const cheerio = require('cheerio');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
+// Function to fetch and extract job description from URL
+async function fetchJobDescription(url) {
+  try {
+    // For LinkedIn and other JS-heavy sites, use Jina AI Reader
+    if (url.includes('linkedin.com') || url.includes('indeed.com') || url.includes('glassdoor.com')) {
+      console.log('Detected JS-heavy site, using Jina AI Reader...');
+      const jinaUrl = 'https://r.jina.ai/' + url;
+      const jinaResponse = await fetch(jinaUrl, {
+        headers: {
+          'Accept': 'application/json',
+          'X-Return-Format': 'text'
+        }
+      });
+      
+      if (jinaResponse.ok) {
+        const text = await jinaResponse.text();
+        if (text && text.length > 200) {
+          console.log('Successfully fetched via Jina AI Reader');
+          return text.substring(0, 10000); // Limit length
+        }
+      }
+      console.log('Jina AI Reader failed, falling back to direct fetch...');
+    }
+    
+    // Standard HTML fetch for other sites
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch URL: ' + response.status);
+    }
+
+    const html = await response.text();
+    const $ = cheerio.load(html);
+    
+    // Remove script and style tags
+    $('script, style, nav, header, footer').remove();
+    
+    // Try to find job description in common containers
+    let description = '';
+    
+    // Common job posting selectors
+    const selectors = [
+      '[class*="description"]',
+      '[class*="job-description"]',
+      '[id*="description"]',
+      '[class*="posting"]',
+      '[class*="content"]',
+      'article',
+      'main'
+    ];
+    
+    for (const selector of selectors) {
+      const element = $(selector).first();
+      if (element.length && element.text().trim().length > 100) {
+        description = element.text().trim();
+        break;
+      }
+    }
+    
+    // Fallback to body text if no specific container found
+    if (!description || description.length < 100) {
+      description = $('body').text().trim();
+    }
+    
+    // Clean up the text
+    description = description
+      .replace(/\s+/g, ' ')  // Normalize whitespace
+      .replace(/\n{3,}/g, '\n\n')  // Limit consecutive newlines
+      .substring(0, 10000);  // Limit length
+    
+    return description;
+  } catch (error) {
+    console.error('Error fetching job description:', error);
+    return null;
+  }
+}
 
 app.post('/api/generate', async (req, res) => {
   const { jobListings, resume, additionalInfo } = req.body;
@@ -25,9 +107,26 @@ app.post('/api/generate', async (req, res) => {
   try {
     const job = jobListings[0];
     
+    // If job has a URL, try to fetch the actual job description
+    let jobDescription = job.description || '';
+    const hasDescription = jobDescription && jobDescription.trim().length > 0;
+    
+    if (job.url && !hasDescription) {
+      console.log('Fetching job description from URL:', job.url);
+      const fetchedDescription = await fetchJobDescription(job.url);
+      if (fetchedDescription) {
+        jobDescription = fetchedDescription;
+        console.log('Successfully fetched job description (' + fetchedDescription.length + ' chars)');
+      } else {
+        console.warn('Could not fetch job description from URL');
+      }
+    } else if (hasDescription) {
+      console.log('Using provided job description (' + jobDescription.length + ' chars)');
+    }
+    
     const jobContext = job.url 
-      ? 'Job URL: ' + job.url + '\n' + (job.description || '(No description provided)')
-      : 'Job Description:\n' + (job.description || '(No description provided)');
+      ? 'Job URL: ' + job.url + '\n\nJob Description:\n' + (jobDescription || '(No description provided)')
+      : 'Job Description:\n' + (jobDescription || '(No description provided)');
     
     const resumeContext = resume.type === 'text' 
       ? 'Resume:\n' + resume.content
